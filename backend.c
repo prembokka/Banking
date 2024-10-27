@@ -5,9 +5,9 @@
 
 #define PORT 8080
 
-int send_response(struct MHD_Connection *connection, const char *data, int status_code) {
+enum MHD_Result send_response(struct MHD_Connection *connection, const char *data, int status_code) {
     struct MHD_Response *response;
-    int ret;
+    enum MHD_Result ret;
 
     response = MHD_create_response_from_buffer(strlen(data), (void*) data, MHD_RESPMEM_PERSISTENT);
     ret = MHD_queue_response(connection, status_code, response);
@@ -15,7 +15,7 @@ int send_response(struct MHD_Connection *connection, const char *data, int statu
     return ret;
 }
 
-int handle_request(void *cls, struct MHD_Connection *connection, const char *url,
+enum MHD_Result handle_request(void *cls, struct MHD_Connection *connection, const char *url,
                    const char *method, const char *version, const char *upload_data,
                    size_t *upload_data_size, void **con_cls) {
     if (strcmp(method, "POST") == 0) {
